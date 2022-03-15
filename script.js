@@ -42,15 +42,12 @@ startButton.addEventListener('click', () => {
       computerFlipCard();
     }, 800);
   }
-  
-  
+
   setTimeout(() => {
     otherCards.forEach((card) => {
       if (card.value === 'J') collectCards();
     });
   }, 802);
-
-  // collectCards()
 });
 
 gameStart();
