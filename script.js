@@ -1,6 +1,22 @@
 import Deck from './deck.js';
 import { Card } from './deck.js';
 
+const CARD_VALUE_MAP = {
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9,
+  10: 10,
+  J: 11,
+  Q: 12,
+  K: 13,
+  A: 14,
+};
+
 const startButton = document.querySelector('.start-button');
 const computerDeck = document.querySelector('.computer-deck');
 const playerDeck = document.querySelector('.player-Deck');
@@ -23,9 +39,18 @@ startButton.addEventListener('click', () => {
   } else {
     playerFlipCard();
     setTimeout(() => {
-      computerFlipCard() 
-    }, 1000)
+      computerFlipCard();
+    }, 800);
   }
+  
+  
+  setTimeout(() => {
+    otherCards.forEach((card) => {
+      if (card.value === 'J') collectCards();
+    });
+  }, 802);
+
+  // collectCards()
 });
 
 gameStart();
@@ -61,7 +86,7 @@ function cleanBeforeRound() {
 function playerFlipCard() {
   // const computerCard = computerCards.pop();
   const playerCard = playerCards.pop();
-  otherCards.push(playerCard)
+  otherCards.push(playerCard);
 
   if (otherCards.length > 0) {
     showPlayedCards(otherCards);
@@ -78,13 +103,16 @@ function computerFlipCard() {
   }
 }
 
-
 function showPlayedCards(cards) {
   playedCards.innerHTML = '';
   return cards.map((card) => {
     console.log(card);
-    playedCards.appendChild(card.getHTML())
+    playedCards.appendChild(card.getHTML());
   });
+}
+
+function collectCards() {
+  console.log('slap');
 }
 
 console.log(computerCards, playerCards, otherCards);
