@@ -4,20 +4,31 @@ import { Card } from './deck.js';
 const startButton = document.querySelector('.start-button');
 const computerDeck = document.querySelector('.computer-deck');
 const playerDeck = document.querySelector('.player-Deck');
-const middleGround = document.querySelector('.middle-ground');
+const playedCards = document.querySelector('.played-cards');
 
 let computerCards = [];
 let playerCards = [];
+let otherCards = [];
 
-let stop = true; 
+let stop, inRound;
 
 startButton.addEventListener('click', () => {
-  console.log(stop);
-  if (stop) gameStart();
-
-  
+  if (stop) {
+    gameStart();
+    return;
+  }
+  console.log(inRound);
+  if (inRound) {
+    cleanBeforeRound();
+  } else {
+    playerFlipCard();
+    setTimeout(() => {
+      computerFlipCard() 
+    }, 1000)
+  }
 });
-gameStart()
+
+gameStart();
 function gameStart() {
   const deck = new Deck();
   deck.shuffle();
@@ -35,8 +46,45 @@ function gameStart() {
       ];
     }
   }
+
+  inRound = false;
+  stop = false;
+}
+
+function cleanBeforeRound() {
+  inRound = false;
+  otherCards = [];
+
+  updateDeckCount();
+}
+
+function playerFlipCard() {
+  // const computerCard = computerCards.pop();
+  const playerCard = playerCards.pop();
+  otherCards.push(playerCard)
+
+  if (otherCards.length > 0) {
+    showPlayedCards(otherCards);
+  }
+}
+
+function computerFlipCard() {
+  // const computerCard = computerCards.pop();
+  const computerCard = computerCards.pop();
+  otherCards.push(computerCard);
+
+  if (otherCards.length > 0) {
+    showPlayedCards(otherCards);
+  }
 }
 
 
+function showPlayedCards(cards) {
+  playedCards.innerHTML = '';
+  return cards.map((card) => {
+    console.log(card);
+    playedCards.appendChild(card.getHTML())
+  });
+}
 
-console.log(computerCards, playerCards);
+console.log(computerCards, playerCards, otherCards);
