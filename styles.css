@@ -7,93 +7,202 @@
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3b9f11;
+  height: 100%;
+  width: 100%;
+}
+
+.game-wrapper {
   display: grid;
-  grid-template-columns: repeat(3rem, 5rem);
-  grid-template-rows: 7rem 2rem 7rem;
-  gap: 0.5rem;
-  cursor: pointer;
+  grid-template-columns: repeat(3, minmax(100px, 200px));
+  /* grid-template-rows: auto; */
+  grid-auto-flow: column;
+  grid-gap: 10rem;
+  width: 100%;
+  height: 50%;
+  align-items: center;
   justify-content: center;
-  padding-top: 1rem;
-  background-color: #d7d7cd;
 }
 
 /* play Button */
 .start-button {
-  grid-column: 1 / 4;
-  grid-row: 1 / 2;
-  background-color: #f7f7f7;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #e5e8e5;
+  color: rgb(234, 22, 22);
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid rgb(128, 127, 127);
+  position: relative;
+  top: -100px;
+}
+
+.start-button:hover {
+  background-color: rgb(218, 213, 213);
+  color: #184505;
+  top: -98px;
+  box-shadow: 2px 5px #072d0e;
+}
+
+.start-button:active {
+  box-shadow: none;
+  top: -103px;
+}
+
+/* Buttons */
+.button-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Play Button */
+.play-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30%;
+  background-color: #31ce56;
+  color: rgb(20, 40, 20);
   font-size: 1.5rem;
   font-weight: bold;
-  color: rgb(104, 101, 101);
-  text-align: center;
+  padding: 0.8rem 2rem;
   cursor: pointer;
-} 
+  border-radius: 5px;
+  border: 1px solid rgb(128, 127, 127);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  box-shadow: #ebefeb 5px 5px 5px 1px;
+  margin: 0 auto;
+}
 
+.play-button:hover {
+  background-color: #5ce123;
+  color: #333432;
+  top: 3px;
+  box-shadow: 2px 5px #06781b;
+}
 
+.play-button:active {
+  box-shadow: none;
+  top: 10px;
+}
 
 /*  Computer Deck  */
 .computer-deck {
-display: flex; 
-    flex-direction: row; 
-    flex-wrap: wrap; 
-    justify-content: flex-start; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  height: 55%;
+  color: rgb(213, 223, 225);
+  font-size: 6rem;
+  font-weight: bold;
+  visibility: hidden;
+  border: 1px solid rgb(223, 217, 217);
+  margin: 10rem auto;
+  z-index: 1000;
+  border-radius: 10px;
+  background-color: rgba(47, 165, 215, 0.996);
+  box-shadow: #17edf0 5px 5px 5px 1px;
 }
 
-
 /*  Player Deck  */
-.played-cards {
-   display: flex; 
-    flex-direction: row; 
-    flex-wrap: wrap; 
-    justify-content: flex-end; 
+.player-Deck {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  height: 55%;
+  color: rgb(227, 214, 214);
+  font-size: 6rem;
+  font-weight: bold;
+  visibility: hidden;
+  border: 1px solid rgb(215, 213, 213);
+  margin: 10rem auto;
+  z-index: 1000;
+  border-radius: 10px;
+  background-color: rgb(215, 47, 47);
+  box-shadow: #e88fc4 5px 5px 5px 1px;
 }
 
 /* diplay how many cards are out */
-.played-cards-number {
-  background-color: red;
-  position: absolute;
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  flex-direction: row;
+.played-Cards-title {
+  color: rgb(223, 218, 218);
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  letter-spacing: 1px;
+  text-align: center;
 }
 
-
-
-.game-wrapper {
+.played-cards-number {
   display: flex;
-  flex-direction: row;
   justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: rgb(239, 231, 231);
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
-.played-cards {
+/*  container of the played cards */
+.played-cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-.card {
-  position: absolute;
-  border-radius: 0.5rem;
-  background-color: #fff;
-  box-shadow: 3px 4px 2px rgba(98, 96, 96, 0.5);
+/*  played cards are the ones in the middle */
+.played-cards {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(225, 223, 223);
+  font-size: 6rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  padding: 3rem 2.2rem;
-  z-index: 2;
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-  align-items: center; 
+  padding: 4rem 2rem;
+  margin: auto 0;
 }
 
 .card {
-  z-index: 9;
-  margin: 20px; /* for demo purpose  */
-  font-size: 2.5rem;
+  position: absolute;
+  border-radius: 0.5rem;
+  box-shadow: 3px 4px 2px rgba(249, 248, 248, 0.5);
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  padding: 4rem 3rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto 0;
+  border: 1px solid #cccdc8;
 }
 
 .card.red {
@@ -110,7 +219,7 @@ display: flex;
 .card::after {
   position: absolute;
   content: attr(data-value);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .card::before {
@@ -122,4 +231,18 @@ display: flex;
   bottom: 2px;
   right: 5px;
   transform: rotate(180deg);
+}
+
+@media (max-width: 1400px) {
+  .game-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(10px, 150px));
+    /* grid-template-rows: auto; */
+    grid-auto-flow: column;
+    grid-gap: 3rem;
+    width: 100%;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+  }
 }
