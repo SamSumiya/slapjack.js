@@ -17,6 +17,7 @@ const CARD_VALUE_MAP = {
   A: 14,
 };
 
+const playButton = document.querySelector('.play-button');
 const startButton = document.querySelector('.start-button');
 const computerDeck = document.querySelector('.computer-deck');
 const playerDeck = document.querySelector('.player-Deck');
@@ -31,7 +32,11 @@ let updatedComputerDeck, updatedPlayerDeck;
 let slap = false;
 let isGameOver, inRound;
 
-let computingTime; 
+let computingTime;
+
+
+// Initial Control of css status 
+playButton.style.visibility = 'hidden'
 
 // change the state of slap from false to true if player slaps
 function playerSlap() {
@@ -74,11 +79,30 @@ setInterval(() => {
   displayNumberOfCards();
 }, 200);
 
-// play button to start and continue the game
+// start button
 startButton.addEventListener('click', () => {
-  // clean the round when player or computer wins the round
+  function start() {
+    let i = 0; 
+    
+    function game() {
+      console.log();
+      if (i < 1) {
+        gameStart() 
+      }
+      ++i
+    } 
+     return game(); 
+  }
+  playButton.style.visibility = 'visible';
+  startButton.style.visibility = 'hidden'
+  start()
+});
 
-  computingTime = randTimeGenerator() 
+// play button to start and continue the game
+playButton.addEventListener('click', () => {
+  // clean the round when player or computer wins the round
+  // gameStart();
+  computingTime = randTimeGenerator();
   console.log(computingTime);
   if (inRound) {
     // cleanBeforeRound();
@@ -105,6 +129,8 @@ startButton.addEventListener('click', () => {
 
   // this setTimeout checks if there is a J in the otherCards or not.
   setTimeout(() => {
+    // need to end the game before it exceeds 52 cards
+
     otherCards.forEach((card) => {
       if (card.value === 'J') {
         collectCards(card);
@@ -115,8 +141,12 @@ startButton.addEventListener('click', () => {
   displayNumberOfCards();
 });
 
-gameStart();
 function gameStart() {
+  // Change default css
+  playedCardsNumber.style.visibility = 'visible';
+
+  computerDeck.style.visibility = 'visible';
+  playerDeck.style.visibility = 'visible';
   // create a deck of ordered deck
   const deck = new Deck();
   // create an unorderded deck of card by shuffling it
@@ -143,6 +173,7 @@ function gameStart() {
 
 // display number of Card computer and player has
 function displayNumberOfCards() {
+  console.log(updatedComputerDeck);
   if (updatedComputerDeck) {
     computerDeck.innerHTML = updatedComputerDeck.cards.length;
   } else {
@@ -156,6 +187,7 @@ function displayNumberOfCards() {
     playerDeck.innerHTML = playerCards.length;
   }
 
+  // playedCardsNumber.style.visibility = 'visible';
   playedCardsNumber.innerHTML = otherCards.length;
 }
 
@@ -190,7 +222,9 @@ function computerFlipCard() {
 function showPlayedCards(cards) {
   playedCards.innerHTML = '';
   return cards.map((card) => {
-    if (card !== undefined) playedCards.appendChild(card.getHTML());
+    if (card !== undefined) {
+      playedCards.appendChild(card.getHTML())
+    };
   });
 }
 
