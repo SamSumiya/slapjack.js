@@ -11,7 +11,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #3b9f11;
+  background-color: #349809;
   height: 100%;
   width: 100%;
 }
@@ -43,19 +43,20 @@ body {
   border-radius: 5px;
   border: 1px solid rgb(128, 127, 127);
   position: relative;
-  top: -100px;
+  top: -10px;
+  z-index: 1001;
 }
 
 .start-button:hover {
   background-color: rgb(218, 213, 213);
   color: #184505;
-  top: -98px;
+  top: -7px;
   box-shadow: 2px 5px #072d0e;
 }
 
 .start-button:active {
   box-shadow: none;
-  top: -103px;
+  top: -5px;
 }
 
 /* Buttons */
@@ -86,6 +87,7 @@ body {
   position: relative;
   box-shadow: #ebefeb 5px 5px 5px 1px;
   margin: 0 auto;
+  visibility: hidden; 
 }
 
 .play-button:hover {
@@ -102,6 +104,9 @@ body {
 
 /*  Computer Deck  */
 .computer-deck {
+  background-image: url('./images//back.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -109,34 +114,59 @@ body {
   width: 80%;
   height: 55%;
   color: rgb(213, 223, 225);
-  font-size: 6rem;
+  font-size: 2rem;
   font-weight: bold;
   visibility: hidden;
-  border: 1px solid rgb(223, 217, 217);
   margin: 10rem auto;
   z-index: 1000;
   border-radius: 10px;
-  background-color: rgba(47, 165, 215, 0.996);
-  box-shadow: #17edf0 5px 5px 5px 1px;
+}
+
+.computer-deck-number {
+  padding: 0.2rem 1.5rem;
+  color: rgb(240, 235, 235);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: -113px;
+  left: -12px;
+  font-size: 1.3rem;
+  white-space: nowrap;
+  color: rgb(148, 46, 220)
 }
 
 /*  Player Deck  */
 .player-Deck {
+ background-image: url('./images//back.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 80%;
   height: 55%;
-  color: rgb(227, 214, 214);
-  font-size: 6rem;
+  color: rgb(242, 7, 7);
+  font-size: 2rem;
   font-weight: bold;
   visibility: hidden;
-  border: 1px solid rgb(215, 213, 213);
   margin: 10rem auto;
   z-index: 1000;
   border-radius: 10px;
-  background-color: rgb(215, 47, 47);
-  box-shadow: #e88fc4 5px 5px 5px 1px;
+}
+
+.player-deck-number {
+  padding: 0.2rem 1.5rem;
+  color: rgb(240, 235, 235);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: -113px;
+  left: -12px;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  color: rgb(242, 242, 25);
 }
 
 /* diplay how many cards are out */
@@ -177,6 +207,7 @@ body {
 
 /*  played cards are the ones in the middle */
 .played-cards {
+  display: flex;
   margin-top: 2rem;
   display: flex;
   justify-content: center;

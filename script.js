@@ -17,13 +17,18 @@ const CARD_VALUE_MAP = {
   A: 14,
 };
 
+const home = document.querySelector('.app-wrapper');
+const playedCardsTitle = document.querySelector('.played-Cards-title');
+const playedCardsNumber = document.querySelector('.played-cards-number');
 const playButton = document.querySelector('.play-button');
 const startButton = document.querySelector('.start-button');
 const computerDeck = document.querySelector('.computer-deck');
+const computerDeckNumber = document.querySelector('.computer-deck-number');
 const playerDeck = document.querySelector('.player-Deck');
+const playerDeckNumber = document.querySelector('.player-deck-number');
 const playedCards = document.querySelector('.played-cards');
 const playerRound = document.querySelector('.player-round');
-const playedCardsNumber = document.querySelector('.played-cards-number');
+// const playedCardsNumber = document.querySelector('.played-cards-number');
 
 let computerCards = [];
 let playerCards = [];
@@ -34,9 +39,14 @@ let isGameOver, inRound;
 
 let computingTime;
 
+// Initial Control of css status
+playButton.style.visibility = 'hidden';
+playedCardsNumber.style.visibility = 'hidden';
+playedCardsTitle.style.visibility = 'hidden';
 
-// Initial Control of css status 
-playButton.style.visibility = 'hidden'
+document.body.style.backgroundImage = "url('./images/img.png')";
+document.body.style.objectFit = 'fill'; 
+document.body.style.backgroundRepeat = 'repeat'; 
 
 // change the state of slap from false to true if player slaps
 function playerSlap() {
@@ -82,20 +92,23 @@ setInterval(() => {
 // start button
 startButton.addEventListener('click', () => {
   function start() {
-    let i = 0; 
-    
+    let i = 0;
+
     function game() {
       console.log();
       if (i < 1) {
-        gameStart() 
+        gameStart();
       }
-      ++i
-    } 
-     return game(); 
+      ++i;
+    }
+    return game();
   }
+  document.body.style.backgroundImage = 'none'
   playButton.style.visibility = 'visible';
-  startButton.style.visibility = 'hidden'
-  start()
+  playedCardsNumber.style.visibility = 'visible';
+  playedCardsTitle.style.visibility = 'visible';
+  startButton.style.visibility = 'hidden';
+  start();
 });
 
 // play button to start and continue the game
@@ -175,16 +188,16 @@ function gameStart() {
 function displayNumberOfCards() {
   console.log(updatedComputerDeck);
   if (updatedComputerDeck) {
-    computerDeck.innerHTML = updatedComputerDeck.cards.length;
+    computerDeckNumber.innerHTML = `Computer: ${computerCards.length}`;
   } else {
-    computerDeck.innerHTML = computerCards.length;
+    computerDeckNumber.innerHTML = `Computer: ${computerCards.length}`;
   }
 
   if (updatedPlayerDeck) {
     console.log(updatedPlayerDeck.cards.length);
-    playerDeck.innerHTML = updatedPlayerDeck.cards.length;
+    playerDeckNumber.innerHTML = `Player: ${updatedPlayerDeck.cards.length}`;
   } else {
-    playerDeck.innerHTML = playerCards.length;
+    playerDeckNumber.innerHTML = `Player: ${playerCards.length}`;
   }
 
   // playedCardsNumber.style.visibility = 'visible';
@@ -223,8 +236,8 @@ function showPlayedCards(cards) {
   playedCards.innerHTML = '';
   return cards.map((card) => {
     if (card !== undefined) {
-      playedCards.appendChild(card.getHTML())
-    };
+      playedCards.appendChild(card.getHTML());
+    }
   });
 }
 
