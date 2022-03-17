@@ -1,23 +1,6 @@
 import Deck from './deck.js';
 import { Card } from './deck.js';
 
-const CARD_VALUE_MAP = {
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  6: 6,
-  7: 7,
-  8: 8,
-  9: 9,
-  10: 10,
-  J: 11,
-  Q: 12,
-  K: 13,
-  A: 14,
-};
-
-const home = document.querySelector('.app-wrapper');
 const playedCardsTitle = document.querySelector('.played-Cards-title');
 const playedCardsNumber = document.querySelector('.played-cards-number');
 const playButton = document.querySelector('.play-button');
@@ -27,8 +10,7 @@ const computerDeckNumber = document.querySelector('.computer-deck-number');
 const playerDeck = document.querySelector('.player-Deck');
 const playerDeckNumber = document.querySelector('.player-deck-number');
 const playedCards = document.querySelector('.played-cards');
-const playerRound = document.querySelector('.player-round');
-// const playedCardsNumber = document.querySelector('.played-cards-number');
+// const playerRound = document.querySelector('.player-round');
 
 let computerCards = [];
 let playerCards = [];
@@ -36,7 +18,6 @@ let otherCards = [];
 let updatedComputerDeck, updatedPlayerDeck;
 let slap = false;
 let isGameOver, inRound;
-
 let computingTime;
 
 // Initial Control of css status
@@ -44,9 +25,10 @@ playButton.style.visibility = 'hidden';
 playedCardsNumber.style.visibility = 'hidden';
 playedCardsTitle.style.visibility = 'hidden';
 
+// inital background image setup
 document.body.style.backgroundImage = "url('./images/img.png')";
-document.body.style.objectFit = 'fill'; 
-document.body.style.backgroundRepeat = 'repeat'; 
+document.body.style.objectFit = 'fill';
+document.body.style.backgroundRepeat = 'repeat';
 
 // change the state of slap from false to true if player slaps
 function playerSlap() {
@@ -54,6 +36,7 @@ function playerSlap() {
   return;
 }
 
+// slap using space when J appears!!
 document.addEventListener('keydown', () => {
   playerSlap();
 });
@@ -65,7 +48,7 @@ function collectCards() {
     setTimeout(() => {
       computerCards = computerCards.concat(otherCards);
       clearOtherCards();
-
+      // create a new deck of computer deck and shuffle it for computer
       updatedComputerDeck = new Deck(computerCards);
       updatedComputerDeck.shuffle();
       // computerCards.innerHTML = updatedComputerDeck.cards.length;
@@ -74,12 +57,15 @@ function collectCards() {
     // player slap first and gets the card in updatedPlayerDeck
     playerCards = playerCards.concat(otherCards);
     clearOtherCards();
+    // create a new deck of computer deck and shuffle it for player
     updatedPlayerDeck = new Deck(playerCards);
     updatedPlayerDeck.shuffle();
   }
+  // reset slap back to false
   slap = false;
 }
 
+// store the played cards in other cards array
 function clearOtherCards() {
   otherCards = [];
 }
@@ -91,24 +77,14 @@ setInterval(() => {
 
 // start button
 startButton.addEventListener('click', () => {
-  function start() {
-    let i = 0;
-
-    function game() {
-      console.log();
-      if (i < 1) {
-        gameStart();
-      }
-      ++i;
-    }
-    return game();
-  }
-  document.body.style.backgroundImage = 'none'
+  gameStart();
+  // working with initial game setup by using css visibility
+  document.body.style.backgroundImage = 'none';
   playButton.style.visibility = 'visible';
   playedCardsNumber.style.visibility = 'visible';
   playedCardsTitle.style.visibility = 'visible';
   startButton.style.visibility = 'hidden';
-  start();
+  // start();
 });
 
 // play button to start and continue the game
@@ -133,7 +109,7 @@ playButton.addEventListener('click', () => {
 
     setTimeout(() => {
       displayNumberOfCards();
-    }, computingTime + 10);
+    }, computingTime + 1);
     //  displayNumberOfCards();
     if (updatedComputerDeck.cards.length >= 52) {
       console.log('Computer wins');
@@ -143,14 +119,19 @@ playButton.addEventListener('click', () => {
   // this setTimeout checks if there is a J in the otherCards or not.
   setTimeout(() => {
     // need to end the game before it exceeds 52 cards
-
     otherCards.forEach((card) => {
       if (card.value === 'J') {
+        if (!slap) {
+          alert('Computer slapped first');
+        } else {
+          alert('You slapped first!!!');
+        }
         collectCards(card);
       }
     });
   }, 802);
 
+  // display the number of the cards
   displayNumberOfCards();
 });
 
@@ -251,5 +232,5 @@ function gameOver() {
 }
 
 function randTimeGenerator() {
-  return Math.floor(Math.random() * 1000 + 300);
+  return Math.floor(Math.abs(Math.random() * 1000 - Math.random() * 800));
 }

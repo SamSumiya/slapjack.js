@@ -43,7 +43,7 @@ body {
   border-radius: 10px;
   border: 1px solid rgb(235, 233, 233);
   position: relative;
-  top: -5px;
+  top: -150px;
   z-index: 1001;
   box-shadow: 5px 3px 15px #06f74a;
 }
@@ -51,13 +51,14 @@ body {
 .start-button:hover {
   background-color: rgb(218, 213, 213);
   color: #3a9b10;
-  top: -3px;
+  top: -149px;
   box-shadow: 5px 7px 10px #05781a;
 }
 
 .start-button:active {
   box-shadow: none;
-  top: 0px;
+  top: -145px;
+  box-shadow: 5px 7px 10px #001304;
 }
 
 /* Buttons */
