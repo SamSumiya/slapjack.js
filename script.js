@@ -10,15 +10,23 @@ const computerDeckNumber = document.querySelector('.computer-deck-number');
 const playerDeck = document.querySelector('.player-Deck');
 const playerDeckNumber = document.querySelector('.player-deck-number');
 const playedCards = document.querySelector('.played-cards');
+const roundResult = document.querySelector('.round-result');
 // const playerRound = document.querySelector('.player-round');
+
+let computingTime = randTimeGenerator(); 
+
+// Flipped Cards
+let flippedPlayerCard, flippedComputerCard;
 
 let computerCards = [];
 let playerCards = [];
 let otherCards = [];
 let updatedComputerDeck, updatedPlayerDeck;
 let slap = false;
-let isGameOver, inRound;
-let computingTime;
+let isGameOver = false;
+let inRound = false;
+let turn = false;
+
 
 // Initial Control of css status
 playButton.style.visibility = 'hidden';
@@ -51,6 +59,8 @@ function collectCards() {
       // create a new deck of computer deck and shuffle it for computer
       updatedComputerDeck = new Deck(computerCards);
       updatedComputerDeck.shuffle();
+      updatedPlayerDeck = new Deck(playerCards);
+      updatedPlayerDeck.shuffle();
       // computerCards.innerHTML = updatedComputerDeck.cards.length;
     }, 999);
   } else {
@@ -59,6 +69,7 @@ function collectCards() {
     clearOtherCards();
     // create a new deck of computer deck and shuffle it for player
     updatedPlayerDeck = new Deck(playerCards);
+
     updatedPlayerDeck.shuffle();
   }
   // reset slap back to false
@@ -73,6 +84,7 @@ function clearOtherCards() {
 // dynamically change number of computer cards and player cards to be displayed on the screen
 setInterval(() => {
   displayNumberOfCards();
+  clearDeckOnDOM();
 }, 200);
 
 // start button
@@ -89,31 +101,42 @@ startButton.addEventListener('click', () => {
 
 // play button to start and continue the game
 playButton.addEventListener('click', () => {
+  // clear middle deck
+  console.log(otherCards);
+
   // clean the round when player or computer wins the round
   // gameStart();
-  computingTime = randTimeGenerator();
-  console.log(computingTime);
+  // computingTime = randTimeGenerator();
   if (inRound) {
     // cleanBeforeRound();
+    // setTimeout(() => {
+    //   computerFlipCard();
+    // }, computingTime - 10);
   } else {
-    playerFlipCard();
     setTimeout(() => {
       computerFlipCard();
-    }, computingTime);
+    }, computingTime - 10);
+
+    playerFlipCard();
   }
+
+  // console.log(flippedComputerCard, flippedPlayerCard);
+  // if (flippedComputerCard !== undefined || flippedPlayerCard !== undefined) {
+  //   if (flippedComputerCard.value === 'J') {
+  //     console.log(flippedComputerCard);
+  //   } else if (flippedPlayerCard.value === 'J') {
+  //     console.log(flippedPlayerCard);
+  //   }
+  // }
 
   // if updatedComputerDeck's cards length === 52 then show who wins the match
   if (updatedComputerDeck !== undefined) {
-    console.log(updatedComputerDeck);
-    console.log(computingTime);
-
     setTimeout(() => {
       displayNumberOfCards();
     }, computingTime + 1);
     //  displayNumberOfCards();
-    if (updatedComputerDeck.cards.length >= 52) {
-      console.log('Computer wins');
-    }
+    // if (updatedComputerDeck.cards.length >= 52) {
+    // }
   }
 
   // this setTimeout checks if there is a J in the otherCards or not.
@@ -127,6 +150,7 @@ playButton.addEventListener('click', () => {
           alert('You slapped first!!!');
         }
         collectCards(card);
+        return;
       }
     });
   }, 802);
@@ -137,11 +161,14 @@ playButton.addEventListener('click', () => {
 
 function gameStart() {
   // Change default css
-  playedCardsNumber.style.visibility = 'visible';
 
+  playedCardsNumber.style.visibility = 'visible';
   computerDeck.style.visibility = 'visible';
   playerDeck.style.visibility = 'visible';
   // create a deck of ordered deck
+
+  restart();
+
   const deck = new Deck();
   // create an unorderded deck of card by shuffling it
   deck.shuffle();
@@ -167,7 +194,9 @@ function gameStart() {
 
 // display number of Card computer and player has
 function displayNumberOfCards() {
-  console.log(updatedComputerDeck);
+  if (updatedComputerDeck || updatedPlayerDeck) {
+    gameOver();
+  }
   if (updatedComputerDeck) {
     computerDeckNumber.innerHTML = `Computer: ${computerCards.length}`;
   } else {
@@ -175,7 +204,6 @@ function displayNumberOfCards() {
   }
 
   if (updatedPlayerDeck) {
-    console.log(updatedPlayerDeck.cards.length);
     playerDeckNumber.innerHTML = `Player: ${updatedPlayerDeck.cards.length}`;
   } else {
     playerDeckNumber.innerHTML = `Player: ${playerCards.length}`;
@@ -185,18 +213,22 @@ function displayNumberOfCards() {
   playedCardsNumber.innerHTML = otherCards.length;
 }
 
-// function cleanBeforeRound() {
-//   inRound = false;
-//   otherCards = [];
-
-//   updateDeckCount();
-// }
-
-// player flip the cards
-
 function playerFlipCard() {
-  const playerCard = playerCards.pop();
-  otherCards.push(playerCard);
+  flippedPlayerCard = playerCards.pop();
+  console.log(flippedPlayerCard);
+
+  // setTimout(() => {
+  //   if (playerCard.value === 'J') {
+  //     if (!slap) {
+  //       alert('Computer slapped first');
+  //     } else {
+  //       alert('You slapped first!!!');
+  //     }
+  //     collectCards(card);
+  //   }
+  // }, 1000);
+
+  otherCards.push(flippedPlayerCard);
 
   if (otherCards.length > 0) {
     showPlayedCards(otherCards);
@@ -205,8 +237,31 @@ function playerFlipCard() {
 
 // computer flip the cards
 function computerFlipCard() {
-  const computerCard = computerCards.pop();
-  otherCards.push(computerCard);
+  flippedComputerCard = computerCards.pop();
+  console.log(flippedComputerCard);
+  setTimeout(() => {
+    if (flippedComputerCard.value === 'J') {
+      // if (!slap) {
+      //   alert('Computer slapped first');
+      // } else {
+      //   alert('You slapped first!!!');
+      // }
+      otherCards.push(flippedComputerCard);
+    }
+  }, computingTime - 1);
+
+  // setTimeout(() => {
+  //   if (computerCard.value === 'J') {
+  //     if (!slap) {
+  //       alert('Computer slapped first');
+  //     } else {
+  //       alert('You slapped first!!!');
+  //     }
+  //     collectCards(card);
+  //   }
+  // },1000);
+
+  otherCards.push(flippedComputerCard);
 
   if (otherCards.length > 0) {
     showPlayedCards(otherCards);
@@ -222,15 +277,27 @@ function showPlayedCards(cards) {
   });
 }
 
+function clearDeckOnDOM() {
+  if (otherCards.length === 0) playedCards.innerHTML = '';
+}
+
 function gameOver() {
-  if (updatedComputerDeck !== undefined)
-    if (updatedComputerDeck.cards.length === 0) {
-      computerDeck.innerHTML = 'You lose...';
-    } else if (updatedComputerDeck.cards.length === 0) {
-      playerDeck.innerHTML = 'You win!!!';
-    }
+  if (updatedPlayerDeck.cards.length <= 0) {
+    roundResult.innerHTML = 'Computer won this round';
+    isGameOver = true;
+  } else if (updatedComputerDeck.cards.length <= 0) {
+    roundResult.innerHTML = 'You won this round !!';
+    isGameOver = true;
+  }
+}
+
+function restart() {
+  if (isGameOver) {
+    playerDeckNumber.innerHTML = '';
+    computerDeckNumber.innerHTML = '';
+  }
 }
 
 function randTimeGenerator() {
-  return Math.floor(Math.abs(Math.random() * 1000 - Math.random() * 800));
+  return Math.floor(Math.abs(Math.random() * 1000 + 300));
 }
