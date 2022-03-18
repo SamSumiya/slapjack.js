@@ -99,12 +99,11 @@ startButton.addEventListener('click', () => {
 playButton.addEventListener('click', () => {
   // restart CSS default settings
   playButton.innerHTML = 'Play';
-
   if (!isGameOver) {
     // check if the game is over or not
     setInterval(() => {
       if (playerCards.length === 0 || computerCards.length === 0) gameOver();
-    }, 500);
+    }, 100);
 
     // player's turn to play the game
     // this functin changes the flippedPlayer card
@@ -152,14 +151,17 @@ playButton.addEventListener('click', () => {
 
 function gameStart() {
   // Change default css
-
   playedCardsNumber.style.visibility = 'visible';
   computerDeck.style.visibility = 'visible';
   playerDeck.style.visibility = 'visible';
+
   // create a deck of ordered deck
+
   restart();
 
+  // create a new deck of cards
   const deck = new Deck();
+
   // create an unorderded deck of card by shuffling it
   deck.shuffle();
   // distrubute each card to computer and player by the deck index
@@ -249,6 +251,9 @@ function showPlayedCards(cards) {
 
 // When reset the game, computer and player deck will be reset back to 26 cards
 function resetDecks() {
+  console.log(playerCards, updatedPlayerDeck, 'LOOKKKK AT MMMMEEEE!!');
+  updatedPlayerDeck = null; 
+  updatedComputerDeck = null
   computerCards = [];
   playerCards = [];
   otherCards = [];
@@ -288,5 +293,5 @@ function restart() {
 }
 
 function randTimeGenerator() {
-  return Math.floor(Math.abs(Math.random() * 1000 + 300));
+  return Math.floor(Math.abs(Math.random() * 900));
 }
