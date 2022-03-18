@@ -293,5 +293,11 @@ function restart() {
 }
 
 function randTimeGenerator() {
-  return Math.floor(Math.abs(Math.random() * 900));
+  
+  let generatedTime = Math.floor(Math.abs(Math.random() * 900));
+  if (generatedTime < 450) {
+    let gap = 650 - generatedTime
+    generatedTime += gap
+  }
+  return generatedTime
 }
