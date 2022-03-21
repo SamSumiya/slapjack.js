@@ -1,3 +1,4 @@
+// Importing the Deck and Card classes
 import Deck from './deck.js';
 import { Card } from './deck.js';
 
@@ -53,17 +54,16 @@ function collectCards() {
   // computer slaps before the player, it gets all the played cards and will be stored in the updatedComputerDeck
   if (!slap) {
     setTimeout(() => {
+      // populate computer cards with the played cards
+      // player slap first and gets the card in updatedComputerDeck
       computerCards = computerCards.concat(otherCards);
       clearOtherCards();
       // create a new deck of computer deck and shuffle it for computer
       updatedComputerDeck = new Deck(computerCards);
       updatedComputerDeck.shuffle();
-      // updatedPlayerDeck = new Deck(playerCards);
-      // updatedPlayerDeck.shuffle();
-
-      // computerCards.innerHTML = updatedComputerDeck.cards.length;
     }, computingTime + 100);
   } else {
+    // populate player cards with the played cards
     // player slap first and gets the card in updatedPlayerDeck
     playerCards = playerCards.concat(otherCards);
     clearOtherCards();
@@ -75,7 +75,7 @@ function collectCards() {
   slap = false;
 }
 
-// store the played cards in other cards array
+// clear the played cards array back to empty...
 function clearOtherCards() {
   otherCards = [];
 }
@@ -88,13 +88,15 @@ setInterval(() => {
 
 // start button
 startButton.addEventListener('click', () => {
+  // start the game...
   gameStart();
+
   // working with initial game setup by using css visibility
   document.body.style.backgroundImage = 'none';
+  startButton.style.visibility = 'hidden';
   playButton.style.visibility = 'visible';
   playedCardsNumber.style.visibility = 'visible';
   playedCardsTitle.style.visibility = 'visible';
-  startButton.style.visibility = 'hidden';
 });
 
 // play button to start and continue the game
@@ -125,6 +127,9 @@ playButton.addEventListener('click', () => {
     //   }
     // }, computingTime / 50);
 
+    // flip player card first and then flip computer card
+    // if flipped player card is not Jack, then computer will flip its card 
+    // else just return from this setTimeout 
     setTimeout(() => {
       playerFlipCard();
       console.log(flippedComputerCard, flippedPlayerCard);
@@ -178,15 +183,16 @@ playButton.addEventListener('click', () => {
   }
 });
 
-function lookForJack(card) {
-  setTimeout(() => {
-    if (!slap && card.value === 'J') {
-      alert('Computer slapped first');
-    } else if (slap && card.value === 'J') {
-      collectCards(card);
-    }
-  }, computingTime - 20);
-}
+// function lookForJack(card) {
+//   setTimeout(() => {
+//     if (!slap && card.value === 'J') {
+//       alert('Computer slapped first');
+//     } else if (slap && card.value === 'J') {
+//       collectCards(card);
+//     }
+//   }, computingTime - 20);
+// }
+
 
 function gameStart() {
   // Change default css
@@ -194,8 +200,7 @@ function gameStart() {
   computerDeck.style.visibility = 'visible';
   playerDeck.style.visibility = 'visible';
 
-  // create a deck of ordered deck
-
+  // create a deck of ordered deck and clear the player and computer card numbers
   restart();
 
   // create a new deck of cards
@@ -223,29 +228,34 @@ function gameStart() {
   isGameOver = false;
 }
 
-// display number of Card computer and player has
+// display number of Card computer and player have
 function displayNumberOfCards() {
+
+  // checking if the game is over or not if player or computer cards is equal or less then 0, or updatedPlayerDeck/updatedComputerDeck becomes undefined
   if (updatedComputerDeck && updatedPlayerDeck) {
     gameOver();
   }
+
+  // shows computer cards from updatedComputerDeck or computerCards  
   if (updatedComputerDeck) {
-    computerDeckNumber.innerHTML = `Computer: ${computerCards.length}`;
+    computerDeckNumber.innerHTML = `Computer: ${updatedComputerDeck.cards.length}`;
   } else {
     computerDeckNumber.innerHTML = `Computer: ${computerCards.length}`;
   }
 
+  // display player cards from updatedPlayerDeck or playerCards
   if (updatedPlayerDeck) {
     playerDeckNumber.innerHTML = `Player: ${updatedPlayerDeck.cards.length}`;
   } else {
     playerDeckNumber.innerHTML = `Player: ${playerCards.length}`;
   }
 
-  // playedCardsNumber.style.visibility = 'visible';
+  // display playedCard number from otherCards 
   playedCardsNumber.innerHTML = otherCards.length;
 }
 
 function playerFlipCard() {
-  // check if remaining player cards, if none, game over
+  // get the first card from playerCards 
   flippedPlayerCard = playerCards.shift();
   console.log(flippedPlayerCard, 'flippedPlayerCard');
   if (flippedPlayerCard.value === 'J') {
@@ -300,6 +310,7 @@ function computerFlipCard() {
   return flippedComputerCard;
 }
 
+
 function showPlayedCards(cards) {
   playedCards.innerHTML = '';
   return cards.map((card) => {
@@ -311,7 +322,6 @@ function showPlayedCards(cards) {
 
 // When reset the game, computer and player deck will be reset back to 26 cards
 function resetDecks() {
-  console.log(playerCards, updatedPlayerDeck, 'LOOKKKK AT MMMMEEEE!!');
   updatedPlayerDeck = null;
   updatedComputerDeck = null;
   computerCards = [];
@@ -329,24 +339,25 @@ function gameOver() {
     roundResult.innerHTML = 'Computer won this round';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#FF0000';
+    playButton.style.color = '#ed2424';
   } else if (computerCards.length === 0) {
     roundResult.innerHTML = 'You won this round !!';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#FF0000';
+    playButton.style.color = '#ed2424';
   } else if (updatedPlayerDeck && updatedPlayerDeck.cards.length <= 0) {
     roundResult.innerHTML = 'Computer won this round';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#FF0000';
+    playButton.style.color = '#ed2424';
   } else if (updatedComputerDeck && updatedComputerDeck.cards.length <= 0) {
     roundResult.innerHTML = 'You won this round !!';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#FF0000';
+    playButton.style.color = '#ed2424';
   }
 }
+
 
 function restart() {
   if (isGameOver) {
