@@ -32,7 +32,7 @@ let pause = false;
 playButton.style.visibility = 'hidden';
 playedCardsNumber.style.visibility = 'hidden';
 playedCardsTitle.style.visibility = 'hidden';
-
+playButton.style.color = 'rgba(138, 249, 2, 0.989)';
 // inital background image setup
 document.body.style.backgroundImage = "url('./images/img.png')";
 document.body.style.objectFit = 'fill';
@@ -41,6 +41,7 @@ document.body.style.backgroundRepeat = 'repeat';
 // slap using space when J appears!!
 document.addEventListener('keydown', () => {
   playerSlap();
+  slap = false;
 });
 
 // change the state of slap from false to true if player slaps
@@ -101,55 +102,85 @@ startButton.addEventListener('click', () => {
 
 // play button to start and continue the game
 playButton.addEventListener('click', () => {
+  console.log(otherCards, updatedPlayerDeck, updatedComputerDeck);
+
+  console.log(computerCards, playerCards);
   // restart CSS default settings
   playButton.innerHTML = 'Play';
   if (!isGameOver) {
     // check if the game is over or not
     setInterval(() => {
       if (playerCards.length === 0 || computerCards.length === 0) gameOver();
-    }, 100);
-
-    // player's turn to play the game
-    // this flippedPlayerCard changes the flippedPlayer card
-    // setTimeout(() => {
-    //   playerFlipCard();
-    //   slap = true
-    //   if (flippedPlayerCard.value === 'J' && slap) {
-    //     return;
-    //   } else {
-    //     slap = false
-    //     setTimeout(() => {
-    //       computerFlipCard();
-    //       if (flippedComputerCard.value === 'J') {
-    //         return;
-    //       }
-    //     }, computingTime);
-    //   }
-    // }, computingTime / 50);
+    }, 200);
 
     // flip player card first and then flip computer card
-    // if flipped player card is not Jack, then computer will flip its card 
-    // else just return from this setTimeout 
-    setTimeout(() => {
-      playerFlipCard();
-      console.log(flippedComputerCard, flippedPlayerCard);
-      if (flippedPlayerCard.value !== 'J') {
-        setTimeout(() => {
-          computerFlipCard();
-        }, computingTime);
-        return;
-      } else {
-        // playerFlipCard();
-        return;
-      }
-    }, 100);
-
-    // computer's turn to play the game and waiting time is computingTime
-    // this function only changes the flippedComputer card
-
-    // setTimeout(() => {
-    //   computerFlipCard();
-    // }, computingTime);
+    // if flipped player card is not Jack, then computer will flip its card
+    // else just return from this setTimeout
+    if (!pause) {
+      setTimeout(() => {
+        playerFlipCard();
+        console.log(flippedPlayerCard, flippedComputerCard);
+        if (flippedPlayerCard.value !== 'J') {
+          console.log('flipped Card is not Jack');
+          setTimeout(() => {
+            if (!pause) computerFlipCard();
+            setTimeout(() => {
+              if (flippedComputerCard.value === 'J') {
+                playButton.disabled = false;
+                // pause = true;
+                if (!slap) {
+                  collectCards();
+                  alert('Computer slapped first');
+                  pause = true;
+                } else if (slap) {
+                  collectCards();
+                  alert('You slapped first!!!');
+                  pause = true;
+                }
+                // otherCards.push(flippedComputerCard);
+                // pause = false;
+                return;
+              }
+              return;
+            }, Math.abs(computingTime - 100));
+          }, Math.abs(computingTime));
+          //  pause = false;
+          return;
+        } else if (flippedPlayerCard.value === 'J') {
+          //  playButton.disabled = false;
+          setTimeout(() => {
+              playButton.disabled = false;
+            console.log('flipped Card is Jack');
+            if (flippedPlayerCard.value === 'J') {
+              playButton.disabled = false;
+              // pause = true;
+              console.log(slap);
+              if (!slap) {
+                collectCards();
+                pause = true;
+                 playButton.disabled = false;
+                alert('Computer slapped first');
+              } else if (slap) {
+                collectCards();
+                pause = true;
+                 playButton.disabled = false;
+                alert('You slapped first!!!');
+              }
+              // collectCards();
+              // pause = false;
+              return;
+            }
+            // pause = false;
+          
+            pause = false;
+            return;
+          }, computingTime - 100);
+          //  pause = false;
+          pause = false;
+          return;
+        }
+      }, computingTime);
+    }
 
     // check who wins by utilizing the function of displayNumberOfCards to track of the if it is game over or not..
     if (updatedComputerDeck !== undefined) {
@@ -158,44 +189,19 @@ playButton.addEventListener('click', () => {
       }, computingTime - 25);
     }
 
-    // // this setTimeout checks if there is a J in the otherCards or not.
-    // setTimeout(() => {
-    //   // need to end the game before it exceeds 52 cards
-    //   otherCards.forEach((card) => {
-    //     console.log(otherCards);
-    //     if (card.value === 'J') {
-    //       if (!slap) {
-    //         alert('Computer slapped first');
-    //       } else {
-    //         alert('You slapped first!!!');
-    //       }
-    //       collectCards(card);
-    //       return;
-    //     }
-    //   });
-    // }, computingTime - 20);
-
     // display the number of the cards
     displayNumberOfCards();
   } else {
     gameStart();
     isGameOver = false;
   }
+  pause = false;
 });
-
-// function lookForJack(card) {
-//   setTimeout(() => {
-//     if (!slap && card.value === 'J') {
-//       alert('Computer slapped first');
-//     } else if (slap && card.value === 'J') {
-//       collectCards(card);
-//     }
-//   }, computingTime - 20);
-// }
-
 
 function gameStart() {
   // Change default css
+  playButton.disabled = false;
+  pause = false;
   playedCardsNumber.style.visibility = 'visible';
   computerDeck.style.visibility = 'visible';
   playerDeck.style.visibility = 'visible';
@@ -230,13 +236,12 @@ function gameStart() {
 
 // display number of Card computer and player have
 function displayNumberOfCards() {
-
   // checking if the game is over or not if player or computer cards is equal or less then 0, or updatedPlayerDeck/updatedComputerDeck becomes undefined
   if (updatedComputerDeck && updatedPlayerDeck) {
     gameOver();
   }
 
-  // shows computer cards from updatedComputerDeck or computerCards  
+  // shows computer cards from updatedComputerDeck or computerCards
   if (updatedComputerDeck) {
     computerDeckNumber.innerHTML = `Computer: ${updatedComputerDeck.cards.length}`;
   } else {
@@ -250,31 +255,48 @@ function displayNumberOfCards() {
     playerDeckNumber.innerHTML = `Player: ${playerCards.length}`;
   }
 
-  // display playedCard number from otherCards 
+  // display playedCard number from otherCards
   playedCardsNumber.innerHTML = otherCards.length;
 }
 
 function playerFlipCard() {
-  // get the first card from playerCards 
-  flippedPlayerCard = playerCards.shift();
-  console.log(flippedPlayerCard, 'flippedPlayerCard');
-  if (flippedPlayerCard.value === 'J') {
-    setTimeout(() => {
-      if (flippedPlayerCard.value === 'J') {
-        if (!slap) {
-          alert('Computer slapped first');
-          collectCards();
-        } else if (slap) {
-          alert('You slapped first!!!');
-          collectCards();
+  // get the first card from playerCards
+  if (!pause) {
+    flippedPlayerCard = playerCards.shift();
+    console.log(flippedPlayerCard, 'flippedPlayerCard');
+    if (flippedPlayerCard.value === 'J') {
+      // playButton.disabled = true;
+      // playButton.disabled = true;
+      setTimeout(() => {
+        if (flippedPlayerCard.value === 'J') {
+          pause = true;
+          playButton.disabled = true;
+          if (!slap) {
+            alert('Computer slapped first');
+            collectCards();
+            playButton.disabled = false;
+            pause = false;
+          } else if (slap) {
+            alert('You slapped first!!!');
+            collectCards();
+            playButton.disabled = false;
+            pause = false;
+          }
+          // collectCards();
+          // pause = false;
+          playButton.disabled = false;
+          return;
         }
-        // collectCards(flippedPlayerCard);
+        playButton.disabled = false;
+        // pause = false;
         return;
-      }
-      return;
-    }, computingTime - 100);
+      }, computingTime);
+    } else {
+      playButton.disabled = false;
+    }
+    otherCards.push(flippedPlayerCard);
   }
-  otherCards.push(flippedPlayerCard);
+  // otherCards.push(flippedPlayerCard);
 
   if (otherCards.length > 0) {
     showPlayedCards(otherCards);
@@ -282,26 +304,51 @@ function playerFlipCard() {
   return flippedPlayerCard;
 }
 
+// function flipComputerCard() {
+//   flippedComputerCard = computerCards.shift();
+// }
+
+// function flipPlayerCard() {
+//   flippedPlayerCard = playerCards.shift();
+// }
+
 // computer flip the cards
 function computerFlipCard() {
-  flippedComputerCard = computerCards.shift();
-  console.log(flippedComputerCard, 'flippedComputerCard');
-  if (flippedComputerCard.value === 'J') {
-    setTimeout(() => {
-      if (flippedComputerCard.value === 'J') {
-        if (!slap) {
-          alert('Computer slapped first');
-        } else if (slap) {
-          alert('You slapped first!!!');
+  if (!pause) {
+    flippedComputerCard = computerCards.shift();
+    console.log(flippedComputerCard, 'flippedComputerCard');
+    if (flippedComputerCard.value === 'J') {
+      // playButton.disabled = true;
+      playButton.disabled = true;
+      pause = true;
+      setTimeout(() => {
+        if (flippedComputerCard.value === 'J') {
+          // playButton.disabled = true;
+          pause = true;
+          if (!slap) {
+            alert('Computer slapped first');
+            collectCards();
+            playButton.disabled = false;
+            pause = false;
+          } else if (slap) {
+            alert('You slapped first!!!');
+            collectCards();
+            playButton.disabled = false;
+            pause = false;
+          }
+          playButton.disabled = false;
+          // otherCards.push(flippedComputerCard);
+          // pause = false;
+          return;
+        } else {
+          playButton.disabled = false;
         }
-        collectCards(flippedComputerCard);
+        // pause = false;
         return;
-      }
-      return;
-    }, computingTime - 100);
+      }, computingTime);
+    }
+    otherCards.push(flippedComputerCard);
   }
-
-  otherCards.push(flippedComputerCard);
 
   if (otherCards.length > 0) {
     showPlayedCards(otherCards);
@@ -309,7 +356,6 @@ function computerFlipCard() {
 
   return flippedComputerCard;
 }
-
 
 function showPlayedCards(cards) {
   playedCards.innerHTML = '';
@@ -339,25 +385,24 @@ function gameOver() {
     roundResult.innerHTML = 'Computer won this round';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#ed2424';
+    playButton.style.color = 'rgba(138, 249, 2, 0.989)';
   } else if (computerCards.length === 0) {
     roundResult.innerHTML = 'You won this round !!';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#ed2424';
+    playButton.style.color = 'rgba(138, 249, 2, 0.989)';
   } else if (updatedPlayerDeck && updatedPlayerDeck.cards.length <= 0) {
     roundResult.innerHTML = 'Computer won this round';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#ed2424';
+    playButton.style.color = 'rgba(138, 249, 2, 0.989)';
   } else if (updatedComputerDeck && updatedComputerDeck.cards.length <= 0) {
     roundResult.innerHTML = 'You won this round !!';
     isGameOver = true;
     playButton.innerHTML = 'Play Again ?';
-    playButton.style.color = '#ed2424';
+    playButton.style.color = 'rgba(138, 249, 2, 0.989)';
   }
 }
-
 
 function restart() {
   if (isGameOver) {
@@ -369,8 +414,8 @@ function restart() {
 
 function randTimeGenerator() {
   let generatedTime = Math.floor(Math.abs(Math.random() * 900));
-  if (generatedTime < 450) {
-    let gap = 650 - generatedTime;
+  if (generatedTime < 750) {
+    let gap = 750 - generatedTime;
     generatedTime += gap;
   }
   return generatedTime;
