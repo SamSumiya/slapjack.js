@@ -41,7 +41,6 @@ document.body.style.backgroundRepeat = 'repeat';
 // slap using space when J appears!!
 document.addEventListener('keydown', () => {
   playerSlap();
-  slap = false;
 });
 
 // change the state of slap from false to true if player slaps
@@ -125,6 +124,7 @@ playButton.addEventListener('click', () => {
           setTimeout(() => {
             if (!pause) computerFlipCard();
             setTimeout(() => {
+              console.log(slap);
               if (flippedComputerCard.value === 'J') {
                 playButton.disabled = false;
                 // pause = true;
@@ -414,8 +414,8 @@ function restart() {
 
 function randTimeGenerator() {
   let generatedTime = Math.floor(Math.abs(Math.random() * 900));
-  if (generatedTime < 750) {
-    let gap = 750 - generatedTime;
+  if (generatedTime < 1050) {
+    let gap = 1050 - generatedTime;
     generatedTime += gap;
   }
   return generatedTime;
