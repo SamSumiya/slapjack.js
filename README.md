@@ -1,6 +1,6 @@
 
 # Live URL 
- - slapjack2022.netlify.app 
+ - https://slapjack2022.netlify.app/
 
 # slapjack.js
 
